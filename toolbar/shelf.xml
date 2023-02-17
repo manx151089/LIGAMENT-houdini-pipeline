@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shelfDocument>
+  <!-- This file contains definitions of shelves, toolbars, and tools.
+ It should not be hand-edited when it is being used by the application.
+ Note, that two definitions of the same element are not allowed in
+ a single file. -->
+
+  <toolshelf name="manish" label="manish_custom">
+    <memberTool name="Object_merge_live"/>
+    <memberTool name="extractLocation"/>
+  </toolshelf>
+
+  <tool name="Object_merge_live" label="OBJ_MRG_LIV" icon="hicon:/SVGIcons.index?BUTTONS_add.svg">
+    <helpText><![CDATA[Creates an object merge based on name of the node.]]></helpText>
+    <script scriptType="python"><![CDATA[import os
+import re
+
+def prepareName(text):
+    name = re.sub('^OUT_','OUT_',text)
+    name = "IN-{}-01".format(name)
+    
+    return name
+
+mpos = hou.selectedNodes()[0].position()
+for n in hou.selectedNodes():
+    nodeName = n.name()
+    
+    pos = n.position()
+    
+    new_name = prepareName(nodeName)
+    #print(new_name)
+    
+    objMerge = hou.node(os.path.dirname(n.path())).createNode("object_merge", new_name)
+    
+    #objMerge.setName("IN-" + nodeName + "-01", True)
+    objMerge.move(hou.Vector2(mpos[0],mpos[1]-1))
+    #objMerge.moveToGoodPosition()
+    objMerge.setParms({"objpath1":"`opfullpath(\"..\")+\"/\"+split(opname(\".\"),\"-\",1)`"})
+    objMerge.setCurrent(True, clear_all_selected=True)
+    ]]></script>
+  </tool>
+
+  <tool name="extractLocation" label="ExtAgentLoc" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[print("The following nodes are currently selected:")
+for node in hou.selectedNodes():
+    print(node.path())
+
+print ('>>>',hou.selectedNodes()[0].parm('location').eval())
+
+loc=hou.selectedNodes()[0].parm('location').eval()
+mystr=loc.split('/')[:6]
+x='/'.join(mystr)
+print x
+]]></script>
+  </tool>
+
+  <toolshelf name="custom" label="custom">
+    <memberTool name="loadShells"/>
+    <memberTool name="tool_1"/>
+    <memberTool name="crashFiles"/>
+    <memberTool name="setClip"/>
+    <memberTool name="tool_3"/>
+    <memberTool name="multiShotRop"/>
+    <memberTool name="multiCreator"/>
+    <memberTool name="createMultipleNodes"/>
+    <memberTool name="scatterToPlacement"/>
+  </toolshelf>
+
+  <tool name="loadShells" label="loadShells" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[#node = hou.pwd()
+#geo = node.geometry()
+
+# Add code to modify contents of geo.
+# Use drop down menu to select examples.
+import spider
+import glob
+ 
+
+def getLatestStalk(job,path):
+    sh = spider.getHandler()
+    #job='UTB'
+    #path='/jobs/UTB/ASSET/prop/shells/ivy/zmdl/ZMDL_prop_shells_var25_lod300_v001/ZMDL_prop_shells_var25_lod300_v001.abc'
+    leaf = sh["Leaf"].getFromPath(job, path)
+    twig = leaf.twig()
+    latest_stalk =  twig.latest()
+    #print(latest_stalk["stalkname"])
+    #print latest_stalk
+    return latest_stalk
+
+job='UTB'
+#path='/jobs/UTB/ASSET/prop/shells/ivy/zmdl/ZMDL_prop_shells_var25_lod300_v001/ZMDL_prop_shells_var25_lod300_v001.abc'
+
+#x=getLatestStalk(job,path)
+   
+#print type(x),x["stalkname"],x.getUuid()
+
+
+a=range(1,25)
+
+for each in a:
+    each=str(each).zfill(2)
+    wildCard='/jobs/UTB/ASSET/prop/shells/ivy/zmdl/ZMDL_prop_shells_var'+str(each)+'*/*.abc'
+    paths=glob.glob(wildCard)
+    print paths
+    x=getLatestStalk(job,paths[0])
+    print type(x),x["stalkname"],x.getUuid()
+    uuid=x.getUuid()
+    tString='var'+str(each)+'_prop'
+
+    #uuid='abfa3054-f928-4dc6-b433-88c88bb9fc6f'
+    #tString='var01'+'_prop'   
+    prop=hou.node('/obj/crowd').createNode('cacheIn', tString, 0 )
+    prop.moveToGoodPosition()
+    prop.parm('menu_source').set('pub')
+    prop.parm('stalkUuid').set(uuid)
+    prop.parm('abc_viewportlod').set(0)
+"""
+hou.node('/obj').createNode('geo', tString, 0 )
+wildCard='/jobs/UTB/ASSET/prop/shells/ivy/zmdl/ZMDL_prop_shells_var*/*.abc'
+paths=glob.glob(wildCard)
+#print paths
+for path in paths:
+    print path
+    x=getLatestStalk(job,path)
+    print type(x),x["stalkname"],x.getUuid()"""
+    
+]]></script>
+  </tool>
+
+  <tool name="tool_1" label="objMerge" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hou
+
+cur=hou.selectedNodes()
+
+for each in cur:
+    om=each.parent().createNode('object_merge')
+    om=hou.node(om.path())
+    print om,om.path()
+    #px=cur.position()[0]
+    #py=cur.position()[1]
+    print each.position()
+    print each.name()
+    om.setPosition(hou.Vector2(each.position())+hou.Vector2([0,-2]))
+    om.setName('objMrg_'+each.name())
+    om.parm('objpath1').set(each.path())]]></script>
+  </tool>
+
+  <tool name="setClip" label="setClip" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import toolutils
+
+toolutils.sceneViewer().curViewport().settings().setClipPlanes([10,1000000])]]></script>
+  </tool>
+
+  <tool name="crashFiles" label="crashFiles" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import glob
+import os
+
+search_dir = "/user_data/.tmp/"
+files = list(filter(os.path.isfile, glob.glob(search_dir + "*")))
+files.sort(key=lambda x: os.path.getmtime(x))# print the list
+hipfiles=[]
+for each in files:
+    #print each
+    if (each.endswith('.hip')):
+        #print each
+        hipfiles.append(each)
+        
+a=hou.ui.selectFromList(hipfiles)
+if(a!=()):
+    hou.setUpdateMode(hou.updateMode.Manual)
+    print 'loading:',hipfiles[a[0]]
+    hou.hipFile.load(hipfiles[a[0]])
+    print 'loaded:',hipfiles[a[0]]
+if(a==()):
+    print 'Cancelled or nothing selected']]></script>
+  </tool>
+
+  <tool name="tool_3" label="New Tool" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[# Get a shotgun API connection.
+from shotgun.common import conn
+ 
+# Get a dictionary of the schema for the Shot entity.
+shot_schema = conn.shn.schema_field_read( "Shot" )
+ 
+# Get a list of the field names (the API names, not the column names in the UI).
+# Anything prefixed with "sg_" refers to a field we created in-house (not to be confused with anything related to Singapore).
+field_names = shot_schema.keys()
+ 
+# Get information about the shot 'code' field.
+display_name = shot_schema["code"]["name"]["value"]
+
+print display_name,type(shot_schema["sg_comp_range"]["name"]["value"])]]></script>
+  </tool>
+
+  <tool name="multiShotRop" label="multiShotRop" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import spider
+from venom import crosslogging
+for each in hou.selectedNodes():
+    shotname='_'.join(each.name().split('_')[1:])
+    sh = spider.getHandler()
+    start=sh['Stem'].all(sh['Stem']['job']=='UTB',sh['Stem']['stemtype'] == 'shot',sh['Stem']['stemname'].contains(shotname))[0].getCompRange().start()
+    end=sh['Stem'].all(sh['Stem']['job']=='UTB',sh['Stem']['stemtype'] == 'shot',sh['Stem']['stemname'].contains(shotname))[0].getCompRange().end()
+    print shotname,start,end
+    each.parm('f1').set(start)
+    each.parm('f2').set(end)
+    
+    
+"""
+for each in x:
+    print each.baseName()
+    print each.getCompRange()
+    
+    
+print dir(x[0].getCompRange().start)
+"""]]></script>
+  </tool>
+
+  <tool name="createMultipleNodes" label="createMultipleNodes" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[def createMultipleNodes(num_of_nodes,parmExpressionTuple,mynode,parmTuple,typeOfNode,namePrefix):
+    nodePosition=mynode.position()
+    parent=mynode.parent()
+    for i in range(num_of_nodes):
+        name=namePrefix+str(i)
+        node=parent.createNode(typeOfNode,name)
+        node.setPosition(nodePosition)
+        node.setInput(0,mynode)
+        node.setCurrent(1)
+        node.setDisplayFlag(1)
+        node.moveToGoodPosition()
+        print node
+        #node.cook(force=True,frame_range=(1005,1005))
+        
+        print '\n ERROR:',node.errors(),node.infoTree(),'\n','^^^',node.name()
+        j=0
+        for each in parmTuple:
+            node.parm(each).set(parmExpressionTuple[j])
+            j+=1
+    
+    
+num_of_nodes=25
+mynode=hou.selectedNodes()[0]
+parmTuple=['job','numassemblies','location1']
+version="v002"
+char="genHumanFemaleB"
+pathComp="`'/jobs/UTB/ASSET/character/"+char+"/ivy/ably/ABLY_build_character_"+char+"_"+char+"_crowd_'+padzero(3,opdigits('.'))+'_"+version+"/"+char+"_crowd_'+padzero(3,opdigits('.'))+'.usda'`"
+parmExpressionTuple=["UTB",1,pathComp]
+typeOfNode="dneg::agentCostumesFromUsdAssemblies"
+namePrefix="checkUsd"
+createMultipleNodes(num_of_nodes,parmExpressionTuple,mynode,parmTuple,typeOfNode,namePrefix)
+]]></script>
+  </tool>
+
+  <tool name="multiCreator" label="multiCreator" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import multi_camera_extract
+from qtswitch.qt5 import QtCore, QtUiTools, QtWidgets
+print multi_camera_extract
+#from cachein.cacheinfuncs import *
+#from cachein.cachein_path_info import *
+
+import cachein
+from cachein import autocreatecacheincacheout
+import spider
+from venom import crosslogging
+
+def setParms(node,initial_attributes={}):
+    for parm,val in initial_attributes.items():
+        print parm,val
+        node.parm(parm).deleteAllKeyframes()
+        if ((type(val)==type(0)) or (type(val)==type(0.0))):
+            node.parm(parm).set(val)
+        if (type(val)==type("abcd")):
+            if(val.find('`')!=-1):
+                node.parm(parm).set(val)
+            if(val.find('`')==-1):
+                node.parm(parm).setExpression(val, language=hou.exprLanguage.Hscript)
+        node.moveToGoodPosition()
+
+def getFrameRange(shotname):
+    sh = spider.getHandler()
+    start=sh['Stem'].all(sh['Stem']['job']=='UTB',sh['Stem']['stemtype'] == 'shot',sh['Stem']['stemname'].contains(shotname))[0].getCompRange().start()
+    end=sh['Stem'].all(sh['Stem']['job']=='UTB',sh['Stem']['stemtype'] == 'shot',sh['Stem']['stemname'].contains(shotname))[0].getCompRange().end()
+    return [start,end]
+
+def createCacheOutNodes(shotname,node,mult_farmer,check_timeshift=False,cacheType="crowdc"):
+    shotName=shotname
+    outName='crowdCache'+shotname
+    checkName=cachein.autocreatecacheincacheout_api.check_name_error(node,outName)
+    frameRange=getFrameRange(shotname=shotName)
+    
+    print cacheType,type(cacheType),'<<'
+    if(checkName==None):
+        outNodeTuple=cachein.autocreatecacheincacheout_api.create_nodes(node,shotName,cache_format=cacheType)
+        #docs for auto create the create_nodes() returns null_node,cache_sop,cache_rop
+        #file:///tools/SITE/doc/houdini-cachingtools/houdini-cachingtools-1.46.0-stable/technical/api/cachein/autocreatecacheincacheout_api/index.html
+        
+        newNode=outNodeTuple[0]
+        cacheIn=outNodeTuple[1]
+        cacheOut=outNodeTuple[2]
+        
+        newNode.moveToGoodPosition()
+        cacheIn.moveToGoodPosition()
+        cacheOut.moveToGoodPosition()
+        cacheOut.parmTuple("f").deleteAllKeyframes()
+        cacheOut.parm("f1").set(frameRange[0])
+        cacheOut.parm("f2").set(frameRange[1])
+        
+        apkgNodeType="fxSub_APKG"
+        if(apkgNodeType=="ApkgOutDn::1.0"):
+            apkgAttrs={
+                "behaviour_1":2,
+                "shot":"split(opname('.'),'__',1)"
+                }
+        if(apkgNodeType=="fxSub_APKG"):
+            apkgAttrs={
+                "behaviour1":2,
+                "ivy_shot":"split(opname('.'),'__',1)"
+            }
+        apkg=hou.node('/out').createNode(apkgNodeType,node_name='APKG__'+shotName)
+        apkg.setInput(0,cacheOut)
+        apkg.moveToGoodPosition()
+        setParms(apkg,initial_attributes=apkgAttrs)
+        
+        farmer=hou.node('/out').createNode('farmer',node_name='farmer__crowdCache_'+shotName)
+        farmer.setInput(0,apkg)
+        farmer.moveToGoodPosition()
+        
+
+        hou.Node.setNextInput(mult_farmer,farmer)
+        mult_farmer.moveToGoodPosition()
+        #farmers.append(farmer)
+        #print check_timeshift
+        if(check_timeshift):
+            #print check_timeshift,"= TIMESHIFT"
+            tshift=newNode.parent().createNode('timeshift',node_name="timeshift__"+shotName)
+            tshift.parm('frame').deleteAllKeyframes()
+            tshift.parm('frame').setExpression("ceil(rand(opdigits('.'))*100)+$F")
+            #print tshift,tshift.parm('frame').eval()
+            tshift.setPosition(newNode.position()+hou.Vector2(0,1))
+            tshift.setInput(0,newNode.inputs()[0])
+            newNode.setInput(0,tshift)
+            
+        geoName='RENDER_CROWD__'+shotName
+        geo=hou.node('/obj').createNode('geo',node_name=geoName)
+        om=geo.createNode('object_merge')
+        om.parm('objpath1').set(cacheIn.path())
+        geo.moveToGoodPosition()
+        geo.setColor(hou.Color(0.0,1.0,1.0)) 
+    else:
+        print shotname,':failed to createCacheOutNodes'
+
+
+
+
+def createShotCam():
+    multi_camera_extract.MultiCamImporter(parent = hou.ui.mainQtWindow())
+    reload(multi_shot_workflow)
+    
+    multi_cam_extractor = createShot()
+    multi_cam_extractor.show()
+
+from PySide2 import QtCore, QtUiTools, QtWidgets, QtGui
+class multCreator(QtWidgets.QWidget):
+    def __init__(self):
+        super(multCreator,self).__init__()
+        ui_file="/jobs/LIBRARY/ldev_seq/houdini/hip/mmakh/multiShot/UI/multShot.ui"
+        self.ui = QtUiTools.QUiLoader().load(ui_file,set_parent=self)
+        self.setParent(hou.ui.mainQtWindow(),QtCore.Qt.Window)
+        self.ui.refresh.clicked.connect(self.refreshClick)
+        self.ui.cacheOut_button.clicked.connect(self.cacheOutClick)
+        self.ui.refresh_2.clicked.connect(self.myrefresh_2_clicked)
+        self.ui.mantraNode_button.clicked.connect(self.createMultMantras)
+        self.ui.connectMantraNodes_button.clicked.connect(self.connectMantras)
+        
+    def refreshClick(self):
+        entries=hou.node('/obj').children()
+        model = QtGui.QStandardItemModel()
+        self.ui.listView.setModel(model)
+        filterstr="_AssetCamera"
+        for i in entries:
+            if(i.name().find(filterstr)+1):
+                item = QtGui.QStandardItem(i.name())
+                model.appendRow(item)
+        hou.node('/obj').children()
+        
+    def cacheOutClick(self):
+        selectedIndexes=self.ui.listView.selectedIndexes()
+        check_timeshift=self.ui.check_timeshift.isChecked()
+        farmers=[]
+        mult_farmer=hou.node('/out').createNode('dn::farmerMultiSubmit::1.0')
+        mult_farmer.moveToGoodPosition()
+        for index in selectedIndexes:
+            
+            shotName="_".join(index.data().split('_')[:2])
+            print shotName
+            inputNode=hou.node(self.ui.cacheOut_string.text()).inputs()[0]
+            
+            sourceNode=inputNode.parent().createNode('null',node_name='OUT_crowdCache_'+shotName)
+            sourceNode.setInput(0,inputNode)
+            sourceNode.moveToGoodPosition()
+            if self.ui.crowdc_radio.isChecked():
+                cacheType="crowdc"
+                print "Cache type :",cacheType,shotName
+            elif self.ui.bgeo_radio.isChecked():
+                cacheType="bgeo"
+                print "Cache type :",cacheType,shotName
+            else:
+                hou.ui.displayMessage("no cache type selected")
+                break  
+            createCacheOutNodes(shotName,sourceNode,mult_farmer,check_timeshift=check_timeshift,cacheType=cacheType)
+                        
+        
+        
+        print('all nodes created sucessfully!')   
+        
+    def myrefresh_2_clicked(self):
+        entries=hou.node('/obj').children()
+        model = QtGui.QStandardItemModel()
+        self.ui.listView_2.setModel(model)
+        filterstr="RENDER_CROWD__"
+        for i in entries:
+            if(i.name().find(filterstr)+1):
+                item = QtGui.QStandardItem(i.name())
+                model.appendRow(item)
+        hou.node('/obj').children()
+        
+    def createMultMantras(self):
+        prefix=self.ui.objectList_lineEdit.text()
+        #prefix="RENDER_GRID RENDER_ENV RENDER_GLASS"
+        initial_attributes={
+        "forceobject":prefix+" RENDER_CROWD__`chsop('ivy_shot')`",
+        "ivy_shot":"`split(opname('.'),'_',1)+'_'+split(opname('.'),'_',2)`",
+        "ivy_label":"`split(opname('.'),'_',0)`",
+        "camera":"/obj/`split(opname('.'),'_',1)+'_'+split(opname('.'),'_',2)`_layout_cameraStack/renderCam/camera/ALEMBIC_CAM/camera/cameraShape",
+        "vobject":"",
+        "vm_samplesx":"9",
+        "vm_samplesy":"9",
+        "vm_pfilter":"gaussian 3 3",
+        "vm_minraysamples":"3",
+        "vm_maxraysamples":"5",
+        "vm_reflectlimit":"2",
+        "vm_refractlimit":"2"
+        }
+        
+        mult_farmer=hou.node('/out').createNode('dn::farmerMultiSubmit::1.0')
+        mult_farmer.moveToGoodPosition()
+        selectedIndexes=self.ui.listView_2.selectedIndexes()
+        for index in selectedIndexes:
+            shotName=index.data().split('__')[1]
+            frameRange=getFrameRange(shotName)
+            if(hou.node('/out/crowdRender_'+shotName)==None):
+                mantraDn=hou.node('/out').createNode('dnMantraV2',node_name='crowdRender_'+shotName)
+                for parm,val in initial_attributes.items():
+                    print parm,val
+                    mantraDn.parm(parm).deleteAllKeyframes()
+                    mantraDn.parm(parm).set(val)
+                    mantraDn.moveToGoodPosition()
+                mantraDn.parmTuple('f').deleteAllKeyframes()
+                mantraDn.parmTuple('f').set([frameRange[0],frameRange[1],1])
+                farmer=hou.node('/out').createNode('farmer',node_name='farmer__crowdRender_'+shotName)
+                farmer.setInput(0,mantraDn)
+                farmer.moveToGoodPosition()     
+                
+                hou.Node.setNextInput(mult_farmer,farmer)
+                mult_farmer.moveToGoodPosition()
+                farmer.moveToGoodPosition()    
+    def connectMantras(self):
+        renderNodes=hou.node('/out').allNodes()
+
+        for node in renderNodes:
+                if ("crowdRender_" in node.name()) and ("farmer__" not in node.name()):
+                    cacheNode=hou.node(node.name().replace("crowdRender_","/out/APKG__"))
+                    print node,'<<<<',cacheNode
+                    hou.Node.setNextInput(node,cacheNode)    
+                #if ("crowdCache_" in node.name()) and ("farmer__" not in node.name()):
+                        #print node              
+x=multCreator()
+x.ui.show()]]></script>
+  </tool>
+
+  <tool name="tool_7" label="New Tool" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
+
+  <tool name="tool_4" label="New Tool" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
+
+  <tool name="scatterToPlacement" label="Scatter To Placement" icon="PLASMA_App">
+    <helpText><![CDATA[scatter To agent Placement]]></helpText>
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
+
+  <tool name="tool_5" label="New Tool" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
+
+  <tool name="scatterToPlacement0" label="Scatter To Placement" icon="PLASMA_App">
+    <helpText><![CDATA[scatter To agent Placement]]></helpText>
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
+
+  <shelfSetEdit name="shelf_set_2" fileLocation="/builds/houdini_priv/18.0.774/d53c6965b4/priv/houdini/toolbar/ShelfDefinitions.escape_shelf">
+    <addMemberToolshelf name="dncrowd" inPosition="1"/>
+    <addMemberToolshelf name="labs_toolset" inPosition="2"/>
+  </shelfSetEdit>
+
+  <shelfSetEdit name="shelf_set_td" fileLocation="/builds/houdini_priv/18.0.774/d53c6965b4/priv/houdini/toolbar/ShelfDefinitions.shelf">
+    <removeMemberToolshelf name="cloud" fromPosition="14"/>
+    <addMemberToolshelf name="custom" inPosition="3"/>
+    <addMemberToolshelf name="manish" inPosition="4"/>
+  </shelfSetEdit>
+</shelfDocument>
