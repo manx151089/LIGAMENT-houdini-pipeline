@@ -4,7 +4,8 @@ import inspect
 import hou
 
 print('pythonrc.py is triggered')
-tool_root = os.path.dirname(inspect.getfile(inspect.currentframe()).replace('\\','/').replace('python2.7libs/pythonrc.py',''))
+tool_root = os.path.dirname(inspect.getfile(inspect.currentframe()).replace('\\','/').replace('python3.9libs/pythonrc.py',''))
+print(tool_root)
 python_root = '%s/python' % tool_root
 
 if python_root not in sys.path:

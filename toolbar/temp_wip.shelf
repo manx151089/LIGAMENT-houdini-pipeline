@@ -7,5 +7,6 @@
 
   <toolshelf name="custom_1" label="custom wip">
     <memberTool name="tool_1"/>
+    <memberTool name="tool_3"/>
   </toolshelf>
 </shelfDocument>
