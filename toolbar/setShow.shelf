@@ -5,8 +5,13 @@
  Note, that two definitions of the same element are not allowed in
  a single file. -->
 
-  <toolshelf name="custom_1" label="custom wip">
-    <memberTool name="tool_1"/>
+  <toolshelf name="setProject" label="setProject">
+    <memberTool name="setShow"/>
     <memberTool name="tool_3"/>
   </toolshelf>
+  <tool name="setShow" label="Set Show" icon="hicon:/SVGIcons.index?BUTTONS_add.svg">
+    <helpText><![CDATA[Sets the show env variable and show settings.]]></helpText>
+    <script scriptType="python"><![CDATA[print('helloworld')
+]]></script></tool>
+  
 </shelfDocument>
