@@ -7,11 +7,15 @@
 
   <toolshelf name="setProject" label="setProject">
     <memberTool name="setShow"/>
-    <memberTool name="tool_3"/>
+    <memberTool name="setSeq"/>
+    <memberTool name="setShot"/>
   </toolshelf>
-  <tool name="setShow" label="Set Show" icon="hicon:/SVGIcons.index?BUTTONS_add.svg">
+
+  <tool name="setShow" label="Set Show" icon="hicon:/SVGIcons.index?PANETYPES_take_list.svg">
     <helpText><![CDATA[Sets the show env variable and show settings.]]></helpText>
-    <script scriptType="python"><![CDATA[print('helloworld')
-]]></script></tool>
-  
+    <script scriptType="python"><![CDATA[import importlib
+from setShowBasedEnv import setHscriptEnvirons
+importlib.reload(setHscriptEnvirons)
+setHscriptEnvirons.setShowHou()]]></script>
+  </tool>
 </shelfDocument>
