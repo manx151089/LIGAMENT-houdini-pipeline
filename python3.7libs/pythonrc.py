@@ -9,6 +9,7 @@ python_root = '%s/python' % tool_root
 
 if python_root not in sys.path:
     sys.path.append(python_root)
+    sys.path.append('C:/python37/Lib/site-packages')
 
 #print ('>>>',tool_root,'>>>>>',os.path.dirname(inspect.getfile(inspect.currentframe())))
 #hou.putenv('RANDOM_VARIABLE_NAME','I Love houdini')

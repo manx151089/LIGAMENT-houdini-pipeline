@@ -1,0 +1,2 @@
+from cvzone2.FaceMeshModule import FaceMeshDetector
+from cvzone2.HandTrackingModule import HandDetector
