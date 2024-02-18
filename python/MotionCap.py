@@ -1,8 +1,8 @@
 import cv2
 from cvzone.PoseModule import PoseDetector
 
-def motionCap(cap="D:\Tools\houdini\python\spotJog.mp4"):
-    #cap = cv2.VideoCapture('D:\Tools\houdini\python\spotJog.mp4')
+def motionCap():
+    cap = cv2.VideoCapture('D:\Tools\houdini\python\spotJog.mp4')
     detector = PoseDetector()
     posList = []
     while True:
@@ -25,3 +25,5 @@ def motionCap(cap="D:\Tools\houdini\python\spotJog.mp4"):
         if key == ord('s'):
             with open('AnimationFile.txt','w') as f:
                 f.writelines(["%s\n" % item for item in posList])
+
+motionCap()
