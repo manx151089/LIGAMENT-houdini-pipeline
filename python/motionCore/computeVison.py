@@ -3,7 +3,6 @@ from cvzone.PoseModule import PoseDetector
 import numpy as np
 import hou
 
-print('aaaaaaa')
 
 def openCvMotionCap(path,destination):
     """
@@ -17,30 +16,64 @@ def openCvMotionCap(path,destination):
     destination= 'D:\Tools\houdini\python\AnimationFile.txt'
     openCvMotionCap(path,destination)
     """
+
+    
+    print('===start===')
+    #path = 'D:\Tools\houdini\python\spotJog.mp4'
+    #destination = 'D:\Tools\houdini\python\AnimationFile3.txt'
     cap = cv2.VideoCapture(path)
     detector = PoseDetector()
     posList = []
+    
+    # Get total frames
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    #total_frames = 5 #overriding to debug
+    # Set the frame index to the first frame
+    cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+    print("Total Frames:", total_frames)
+    
+    # Create a font for the text overlay
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_scale = 0.8
+    font_color = (255, 255, 255)  # White color
+    thickness = 2
+    
     while True:
         success, img = cap.read()
+        if not success:
+            break  # End the loop when no more frames are available
+    
         detector.findPose(img)
         lmList, bboxInfo = detector.findPosition(img)
-
-        
+    
         if bboxInfo:
             lmString = ''
             for lm in lmList:
-                #print(lm)
-                lmString += f'{lm[1]},{img.shape[0]-lm[2]},{lm[3]},'
+                #print('lm[1]:',lm[0])
+                #print('img.shape[0]',img.shape[0])
+                #print('lm:',lm)
+                #print(lm[1],lm[2])#this  line errors out
+                lmString += f'{lm[0]},{img.shape[0]-lm[1]},{lm[2]},'#need to test this line I tweaked to be lm[0-2] from lm[1-3]
             posList.append(lmString)
-        print('frame:',len(posList))
-
-
-        cv2.imshow("Image",img)
+        curFrame = len(posList)
+        print('frame:', curFrame)
+    
+        # Add the text overlay
+        cv2.putText(img, "Press 1 to interrupt writing of frames", (20, 40), font, font_scale, font_color, thickness)
+        cv2.putText(img, 'Frame:'+str(curFrame), (20, 100), font, font_scale, font_color, thickness)
+        cv2.imshow("Image", img)
         key = cv2.waitKey(1)
+        if curFrame == total_frames:
+            key = ord('s')
         if key == ord('s'):
-            #with open('AnimationFile.txt','w') as f:
-            with open(destination,'w') as f:
+            with open(destination, 'w') as f:
                 f.writelines(["%s\n" % item for item in posList])
+                break
+    
+    # Release resources
+    cap.release()
+    cv2.destroyAllWindows()
+
 
 def makeOpenCvPoints(path):
     """
