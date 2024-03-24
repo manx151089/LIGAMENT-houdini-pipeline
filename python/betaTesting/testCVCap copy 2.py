@@ -17,7 +17,8 @@ cap.set(cv2.CAP_PROP_POS_FRAMES, total_frames - 1)
 print("Frame Width:", int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
 print("Frame Height:", int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 print("Total Frames:", total_frames)
-print("Current Frame Index:", int(cap.get(cv2.CAP_PROP_POS_FRAMES)))
+
+
 
 while True:
     success, img = cap.read()

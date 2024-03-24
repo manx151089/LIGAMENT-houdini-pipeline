@@ -1,11 +1,11 @@
-#import cv2
-#from cvzone.PoseModule import PoseDetector
-#import numpy as np
-#import hou
-print('gg')
+print("===welcome to visionGod===")
 
+import cv2
+from cvzone.PoseModule import PoseDetector
+import numpy as np
+import hou
 
-#def openCvMotionCap(path,destination):
+def openCvMotionCap(path,destination):
     """
     openCvMotionCap(path,destination)
     
@@ -16,8 +16,6 @@ print('gg')
     path = 'D:\Tools\houdini\python\spotJog.mp4'
     destination= 'D:\Tools\houdini\python\AnimationFile.txt'
     openCvMotionCap(path,destination)
-    """
-
     """
     print('===start===')
     #path = 'D:\Tools\houdini\python\spotJog.mp4'
@@ -74,10 +72,9 @@ print('gg')
     # Release resources
     cap.release()
     cv2.destroyAllWindows()
-    """
 
 
-#def makeOpenCvPoints(path):
+def makeOpenCvPoints(path):
     """
     makeOpenCvPoints(str path)
     This will let the user create openCvPoints in a python sop.
@@ -89,7 +86,7 @@ print('gg')
     path = 'D:/Tools/houdini/python/AnimationFile.txt'
     makeOpenCvPoints(path)
     """
-    """
+    
     node = hou.pwd()
     geo = node.geometry()
     
@@ -109,4 +106,4 @@ print('gg')
     
     geo.clear()
     geo.createPoints(listPosArray)
-    """
+    
