@@ -6,11 +6,15 @@ import mimetypes
 from motionCore import videoToImg
 def checkVideo(filepath):
     fileInfo = mimetypes.guess_type(filepath)#parse doesnt seem to exist in MediaInfo
-    if fileInfo[0].startswith("Video") is True:
+    if fileInfo[0] is None:
+        return False
+    if fileInfo[0].startswith("video") is True:
         return True
     else:
         return False
-
+def removeBackSlash(filepath):
+    mystr = '/'.join(filepath.split('\\'))
+    return mystr
 def run(input="",output="",verbose=0):
     """
     run(input=string,output=string,verbose=int)
@@ -27,19 +31,23 @@ def run(input="",output="",verbose=0):
     run = 'python {0}/run.py --model_weights {0}/weights/{1}.pt --model_type {1}'.format(mBase,modelType)
     if input!="":
         if(os.path.exists(input)):
-            run += ' --input_path '+input
             files=glob.glob(os.path.join(input,"*"))
-            videos = [x for x in files if checkVideo(x)]#this is not returning true
+            files = [removeBackSlash(x) for x in files]
+            videos = [x for x in files if checkVideo(x)]
+            if verbose==1:
+                print("videos:",videos,"\n files:",files)
             ext = os.path.splitext(input)[-1]
             if(len(videos)>0):
                 images = os.path.join(input,'images')
                 if verbose==1:
                     print("video found converting to jpgs")
                 for each in videos:
-                    videoToImg.convertMp4ToJpeg(each,images,mkdir=True)
-                images
+                    print(dir(videoToImg),videoToImg)
+                    videoToImg.convertMp4ToJpg(each,images,mkdir=True)
+                input = images
             if verbose==1:
                 print("input:",input)
+            run += ' --input_path '+input
     if output!="":
         if(os.path.exists(output)):
             pass
@@ -51,7 +59,6 @@ def run(input="",output="",verbose=0):
     log = subprocess.check_output(run)#try subprocess here instead
     if verbose==1:
         print(log)
-
 
 if __name__=="__main__":
     #testing
