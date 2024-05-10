@@ -1,1 +1,0 @@
-DaS>python run.py --model_weights D:\Tools\houdini\python\MiDaS\weights\dpt_swin2_large_384.pt --model_type dpt_swin2_large_384
