@@ -1,0 +1,3 @@
+[submodule "BundleSDF"]
+	path = BundleSDF
+	url = https://github.com/NVlabs/BundleSDF.git

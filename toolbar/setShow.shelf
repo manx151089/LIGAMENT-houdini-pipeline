@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shelfDocument>
+  <!-- This file contains definitions of shelves, toolbars, and tools.
+ It should not be hand-edited when it is being used by the application.
+ Note, that two definitions of the same element are not allowed in
+ a single file. -->
+
+  <toolshelf name="setProject" label="setProject">
+    <memberTool name="setShow"/>
+    <memberTool name="setSeq"/>
+    <memberTool name="setShot"/>
+  </toolshelf>
+
+  <tool name="setShow" label="Set Show" icon="hicon:/SVGIcons.index?PANETYPES_take_list.svg">
+    <helpText><![CDATA[Sets the show env variable and show settings.]]></helpText>
+    <script scriptType="python"><![CDATA[import importlib
+from setShowBasedEnv import setHscriptEnvirons
+importlib.reload(setHscriptEnvirons)
+setHscriptEnvirons.setShowHou()]]></script>
+  </tool>
+</shelfDocument>

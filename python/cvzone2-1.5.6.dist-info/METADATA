@@ -1,0 +1,22 @@
+Metadata-Version: 2.1
+Name: cvzone2
+Version: 1.5.6
+Summary: Computer Vision Helping Library
+Home-page: https://github.com/cvzone/cvzone.git
+Author: Bryan giovanni
+Author-email: bryangrdz@hotmail.com
+License: MIT
+Keywords: ComputerVision,HandTracking,FaceTracking,PoseEstimation
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+License-File: LICENSE.txt
+Requires-Dist: opencv-python
+Requires-Dist: mediapipe
+

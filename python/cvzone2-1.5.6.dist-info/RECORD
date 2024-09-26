@@ -1,0 +1,13 @@
+cvzone2-1.5.6.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+cvzone2-1.5.6.dist-info/LICENSE.txt,sha256=fLNSkSiZK6m65g6aK6T12Zh4_MxPXR6uXETEbT-VfeE,1135
+cvzone2-1.5.6.dist-info/METADATA,sha256=Le6Bfu6ZyrzBMtDNm5zkdwrscpmPojUzblAjph_I6HY,828
+cvzone2-1.5.6.dist-info/RECORD,,
+cvzone2-1.5.6.dist-info/REQUESTED,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cvzone2-1.5.6.dist-info/WHEEL,sha256=AtBG6SXL3KF_v0NxLf0ehyVOh0cold-JbJYXNGorC6Q,92
+cvzone2-1.5.6.dist-info/top_level.txt,sha256=gaUzIhX2cM-nrQFY2pFnE5pFYz_qosrEeyZJ15Suzl0,8
+cvzone2/FaceMeshModule.py,sha256=7fKGF29hCi6mRab4rsVmziYL4KBu9RsSoTnMHIxbNHU,3801
+cvzone2/HandTrackingModule.py,sha256=hDw6Zefq8C5vDz1UUsuYBzHSR5bWyFvH3-xsHzfdd5A,7643
+cvzone2/__init__.py,sha256=7wJt2Bw8zedLsWIEJ6uP3BKk-Msb84jKcSXxkPX0wMw,104
+cvzone2/__pycache__/FaceMeshModule.cpython-37.pyc,,
+cvzone2/__pycache__/HandTrackingModule.cpython-37.pyc,,
+cvzone2/__pycache__/__init__.cpython-37.pyc,,

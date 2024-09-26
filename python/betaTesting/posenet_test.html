@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PoseNet Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.12.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+</head>
+<body>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480"></canvas>
+
+    <script>
+        // Load the PoseNet model
+        async function runPoseNet() {
+            const net = await posenet.load({
+                architecture: 'ResNet50',
+                outputStride: 32,
+                inputResolution: { width: 640, height: 480 },
+                quantBytes: 2
+            });
+
+            console.log('PoseNet model loaded');
+
+            // Get video element
+            const video = document.getElementById('video');
+
+            // Get canvas element
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Get webcam stream and feed to video element
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(error => {
+                    console.error('Error accessing webcam:', error);
+                });
+
+            // Run PoseNet on each frame of video
+            async function detectPose() {
+                const poses = await net.estimatePoses(video, {
+                    flipHorizontal: false,
+                    decodingMethod: 'single-person'
+                });
+                
+                // Draw poses on canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                poses.forEach(({ score, keypoints }) => {
+                    if (score >= 0.2) {
+                        drawKeypoints(keypoints, 0.1, ctx);
+                    }
+                });
+                
+                // Request animation frame to continue detecting poses
+                requestAnimationFrame(detectPose);
+            }
+
+            // Function to draw keypoints on canvas
+            function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
+                for (let i = 0; i < keypoints.length; i++) {
+                    const keypoint = keypoints[i];
+
+                    if (keypoint.score < minConfidence) {
+                        continue;
+                    }
+
+                    const { y, x } = keypoint.position;
+                    ctx.beginPath();
+                    ctx.arc(x * scale, y * scale, 3, 0, 2 * Math.PI);
+                    ctx.fillStyle = 'red';
+                    ctx.fill();
+                }
+            }
+
+            // Start detecting poses
+            detectPose();
+        }
+
+        // Run PoseNet
+        runPoseNet();
+    </script>
+</body>
+</html>
