@@ -18,4 +18,18 @@ from setShowBasedEnv import setHscriptEnvirons
 importlib.reload(setHscriptEnvirons)
 setHscriptEnvirons.setShowHou()]]></script>
   </tool>
+
+  <tool name="setSeq" label="Set Sequence" icon="hicon:/SVGIcons.index?ROP_framecontainer.svg">
+    <script scriptType="python"><![CDATA[import importlib
+from setShowBasedEnv import setHscriptEnvirons
+importlib.reload(setHscriptEnvirons)
+setHscriptEnvirons.setSeqHou()]]></script>
+  </tool>
+
+  <tool name="setShot" label="Set Shot" icon="hicon:/SVGIcons.index?VOLTMATERIAL_desktop-windows_sharp.svg">
+    <script scriptType="python"><![CDATA[import importlib
+from setShowBasedEnv import setHscriptEnvirons
+importlib.reload(setHscriptEnvirons)
+setHscriptEnvirons.setShotHou()]]></script>
+  </tool>
 </shelfDocument>
