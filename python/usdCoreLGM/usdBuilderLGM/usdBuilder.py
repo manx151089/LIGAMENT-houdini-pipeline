@@ -1,21 +1,25 @@
 import hou
 import os
+from lgmfxShotApi import lsa
 
 
-def load_usd_files_from_departments(shot,show,directory="usd"):
+
+def load_usd_files_from_departments(shotname,show,pub_directory="usd"):
     '''
-    Scans the specified base directory for department subfolders, checks for the presence of "geometry.usd"
-    files in each department folder, and loads them into the LOP stage in Houdini. If any USD file is missing,
-    a message is displayed for the user.
+    Scans the specified base directory for department subfolders, checks for 
+    the presence of "geometry.usd" files in each department folder, and loads
+    them into the LOP stage in Houdini. If any USD file is missing, a message
+    is displayed for the user.The root directory where department folders (fx,
+    animation, crowd, layout, etc.) are stored. Each department folder should
+    contain a "geometry.usd" file.
 
-    Args:
-        base_directory (str): The root directory where department folders (fx, animation, crowd, layout, etc.) are stored.
-                             Each department folder should contain a "geometry.usd" file.
-    
+    Args: 
+        shotname (str): folder name of the shot
+        show (str path): path of the show
     Returns:
         None
     '''
-    base_directory = os.path.join(show,shot,directory)
+    base_directory = os.path.join(show,pub_directory,shotname)
     departments = [
         d for d in os.listdir(base_directory) 
         if os.path.isdir(os.path.join(base_directory, d))
@@ -33,7 +37,7 @@ def load_usd_files_from_departments(shot,show,directory="usd"):
             hou.ui.displayMessage(f"USD file not found in department '{dept}': {usd_file_path}")
 
     for usd_file in usd_files_to_load:
-        stage.GetRootLayer().SubLayerStack.append(usd_file)
+        stage.GetRootLayer().subLayerPaths.append(usd_file)
 
     hou.ui.displayMessage(f"USD files loaded from departments: {', '.join(departments)}")
 
