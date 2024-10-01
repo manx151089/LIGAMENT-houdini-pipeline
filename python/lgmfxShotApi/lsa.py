@@ -51,7 +51,7 @@ class lsa:
         '''
         folders = os.path.split(shot)
         offset = 1
-        idx_seq = self.get_prod_folder_from_path(folders)+offset
+        idx_show = self.get_prod_folder_from_path(folders)+offset
         if path:
             list_of_folders = folders[:idx_show]
             show = os.path.join(list_of_folders)
@@ -66,14 +66,17 @@ class lsa:
         Returns:
             list_of_depts
         '''
-        folders = os.path.split(shot)
-        offset = 1
-        idx_seq = self.get_prod_folder_from_path(folders)+offset
-        if path:
-            list_of_folders = folders[:idx_show]
-            show = os.path.join(list_of_folders)
+        if os.path.exists:
+            usd_shot = os.path.split(shot)
+            idx_shots = usd_shot.index("shots")
+            usd_shot[idx_shots] = "usd"
+            dept_dirs = os.listdir(usd_shot)
         else:
-            show = folders[idx_show]
+            print("no shot folders found!")
+        departments = [
+        d for d in dept_dirs
+        if os.path.isdir(os.path.join(shot, d))
+        ]
 
         list_of_depts
         return list_of_depts
