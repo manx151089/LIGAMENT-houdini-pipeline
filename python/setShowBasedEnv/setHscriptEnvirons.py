@@ -4,7 +4,8 @@ import platform
 def setShowHou():
     projname = hou.ui.readInput('enter show code')[1]
     studioProdDir = 'D:/prod/'
-    path=(studioProdDir+projname+'/')
+    #path=(studioProdDir+projname+'/')
+    path=(studioProdDir+projname)
     if os.path.exists(path):
         os.environ['JOB'] = path
         os.environ['SHOW'] = path
@@ -33,6 +34,7 @@ def setSeqHou():
             
         print('setting SEQ env to',project)
         hou.hscript("set -g SEQ = {}".format(project))
+        hou.hscript("set -g SEQNAME = {}".format(seqs[seqSel[0]]))
         #print('set seq to:',hou.getenv('SEQ'))
 
     else:
@@ -44,8 +46,6 @@ def setSeqHou():
             os.makedirs(dir_path,exist_ok=True)
 
 def setShotHou():
-    import hou
-    import os
     seq = hou.getenv('SEQ')
     shotsDir = seq
     if os.path.exists(shotsDir):
@@ -63,6 +63,7 @@ def setShotHou():
                 scene = scene.replace("\\","/")
                 print('setting scene to :',scene)
             hou.hscript("set -g SCENE = {}".format(scene))
+            hou.hscript("set -g SHOTNAME = {}".format(shots[shotSel[0]]))
         else:
             print('No shots found:',shots)
             if hou.ui.displayConfirmation("Create folder?", suppress=hou.confirmType.OverwriteFile):
