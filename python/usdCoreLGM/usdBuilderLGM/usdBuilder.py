@@ -20,11 +20,14 @@ def load_usd_files_from_departments(shotname,show,pub_directory="usd"):
         None
     '''
     base_directory = os.path.join(show,pub_directory,shotname)
+    """
     departments = [
         d for d in os.listdir(base_directory) 
         if os.path.isdir(os.path.join(base_directory, d))
     ]
-
+    """
+    ###NEED TO FIX THIS ONE NOW to use LSA properly and test in houdini LSA first and this script later
+    departments = lsa.list_depts_from_shot
     usd_files_to_load = []
     stage = hou.pwd().editableStage()
 

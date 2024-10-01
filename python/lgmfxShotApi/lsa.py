@@ -64,7 +64,10 @@ class lsa:
         This will create a list of departments that have published usds for a shot
 
         Returns:
-            list_of_depts
+            departments (list): List of the departments that have published a file in the usd folder.
+
+        To-do:
+            Need to add a version resolver function
         '''
         if os.path.exists:
             usd_shot = os.path.split(shot)
@@ -77,8 +80,6 @@ class lsa:
         d for d in dept_dirs
         if os.path.isdir(os.path.join(shot, d))
         ]
-
-        list_of_depts
-        return list_of_depts
+        return departments
     
 
