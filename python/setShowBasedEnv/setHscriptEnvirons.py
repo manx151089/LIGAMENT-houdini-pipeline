@@ -7,12 +7,14 @@ def setShowHou():
     path=(studioProdDir+projname+'/')
     if os.path.exists(path):
         os.environ['JOB'] = path
+        os.environ['SHOW'] = path
     else:
         print('Proj:',path,'\ndoes not exist')
         if hou.ui.displayConfirmation("Create folder?", suppress=hou.confirmType.OverwriteFile):
             os.makedirs(path,exist_ok=True)
             if os.path.exists(path):
                 os.environ['JOB'] = path
+                os.environ['SHOW'] = path
             else:
                 print('permissionDenied: Could not create Job')
         
