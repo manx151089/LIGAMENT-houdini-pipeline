@@ -2,7 +2,7 @@ import os
 import glob
 class lsa:
     '''
-    This is a shot api that can be used in various tools to resolve show,shot,sequence and various other metadata
+    lsa is a shot api that can be used in various tools to resolve show,shot,sequence and various other metadata
 
     Functions:
         get_prod_folder_from_path()
@@ -41,7 +41,7 @@ class lsa:
         return seq
         
 
-    def get_show_from_shot(shot,path=False):
+    def get_show_from_shot(self,shot,path=False):
         '''
         This function returns the seq name or path
         Args:
