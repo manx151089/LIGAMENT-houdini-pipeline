@@ -27,7 +27,7 @@ def load_usd_files_from_departments(shotname,show,pub_directory="usd"):
     ###NEED TO FIX THIS ONE NOW to use LSA properly and test in houdini LSA first and this script later
     #departments = lsa.list_depts_from_shot
     directory = pub_directory
-    base_directory = os.path.join(show,shot,directory)
+    base_directory = os.path.join(show,shotname,directory)
     departments = [
         d for d in os.listdir(base_directory) 
         if os.path.isdir(os.path.join(base_directory, d))
@@ -53,7 +53,7 @@ def load_usd_files_from_departments(shotname,show,pub_directory="usd"):
     
     
 
-
+"""
 if __name__ == "__main__":
     # Testing the function by fetching shot and show from Houdini's environment variables
     shot = hou.getenv("SHOT")
@@ -63,3 +63,5 @@ if __name__ == "__main__":
         load_usd_files_from_departments(shot, show)
     else:
         hou.ui.displayMessage("SHOT or SHOW environment variables are not set.")
+        """
+        
