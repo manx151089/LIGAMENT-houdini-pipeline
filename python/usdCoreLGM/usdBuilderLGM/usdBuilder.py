@@ -25,33 +25,24 @@ def load_usd_files_from_departments(shotname,show,pub_directory="usd"):
     '''
     
     ###NEED TO FIX THIS ONE NOW to use LSA properly and test in houdini LSA first and this script later
-    #departments = lsa.list_depts_from_shot
+    #departments_v2 = lsa.list_depts_from_shot
+    #print(departments_v2)
     directory = pub_directory
-    base_directory = os.path.join(show,shotname,directory)
-    departments = [
-        d for d in os.listdir(base_directory) 
-        if os.path.isdir(os.path.join(base_directory, d))
-    ]
-
-    usd_files_to_load = []
+    base_directory = os.path.normpath( os.path.join(show,shotname,directory))
+    usd_files_to_load = glob.glob(base_directory+'\*\*geometry_v001.usd')
+    usd_files_to_load = [x.replace('\\\\','/') for x in usd_files_to_load]
+    #to avoid all this above scripts repetitively we need a shotApi which
+    #will resolve the paths to the format we want
+    
     stage = hou.pwd().editableStage()
-
-    for dept in departments:
-        usd_file_path = os.path.join(base_directory, dept, "geometry_v001.usd")
-        usd_file_path = os.path.normpath(usd_file_path)
-        if os.path.exists(usd_file_path):
-            usd_files_to_load.append(usd_file_path)
-        else:
-            #hou.ui.displayMessage(f"USD file not found in department '{dept}': {usd_file_path}")
-            print(f"USD file not found in department '{dept}': {usd_file_path}")
-
-    print('usd_files_to_load:',usd_files_to_load)
     for usd_file in usd_files_to_load:
-        stage.GetRootLayer().subLayerPaths.append(usd_file)
+        if os.path.exists(usd_file):
+            root = stage.GetEditTarget().GetLayer()
+            layer = root.subLayerPaths.append(usd_file)
+            print(f"USD file appended: {usd_file} \n in layer: {layer}")
 
-    hou.ui.displayMessage(f"USD files loaded from departments: {', '.join(departments)}")
-    
-    
+        else:
+            print(f"USD file not found: {usd_file}")
 
 """
 if __name__ == "__main__":
