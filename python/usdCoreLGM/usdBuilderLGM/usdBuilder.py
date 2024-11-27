@@ -1,8 +1,10 @@
 import hou
 import os
-from lgmfxShotApi import lsa
+#from lgmfxShotApi import lsa
 import glob
 
+def __init__():
+    pass
 
 
 def load_usd_files_from_departments(shotname,show,pub_directory="usd"):
@@ -28,14 +30,15 @@ def load_usd_files_from_departments(shotname,show,pub_directory="usd"):
     ###NEED TO FIX THIS ONE NOW to use LSA properly and test in houdini LSA first and this script later
     #departments_v2 = lsa.list_depts_from_shot
     #print(departments_v2)
+    
     directory = pub_directory
-    base_directory = os.path.normpath( os.path.join(show,shotname,directory))
+    base_directory = os.path.normpath(os.path.join(show,shotname,directory))
     usd_files_to_load = glob.glob(base_directory+'\*\*geometry_v001.usd')
     usd_files_to_load = [x.replace('\\\\','/') for x in usd_files_to_load]
     #to avoid all this above scripts repetitively we need a shotApi which
     #will resolve the paths to the format we want
-    
-    stage = hou.pwd().editableStage()
+    print('PRELOAD : usd files found:',usd_files_to_load)
+    stage = hou.pwd().editableStage()#
     for usd_file in usd_files_to_load:
         if os.path.exists(usd_file):
             root = stage.GetEditTarget().GetLayer()
@@ -44,16 +47,5 @@ def load_usd_files_from_departments(shotname,show,pub_directory="usd"):
 
         else:
             print(f"USD file not found: {usd_file}")
+    
 
-"""
-if __name__ == "__main__":
-    # Testing the function by fetching shot and show from Houdini's environment variables
-    shot = hou.getenv("SHOT")
-    show = hou.getenv("SHOW")
-
-    if shot and show:
-        load_usd_files_from_departments(shot, show)
-    else:
-        hou.ui.displayMessage("SHOT or SHOW environment variables are not set.")
-        """
-        
