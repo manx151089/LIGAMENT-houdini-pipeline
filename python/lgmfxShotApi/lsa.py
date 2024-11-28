@@ -69,17 +69,19 @@ class lsa:
         To-do:
             Need to add a version resolver function
         '''
-        if os.path.exists:
-            usd_shot = os.path.split(shot)
-            idx_shots = usd_shot.index("shots")
-            usd_shot[idx_shots] = "usd"
-            dept_dirs = os.listdir(usd_shot)
+        dept_dirs = []
+        pubs = shot.replace('shots','usd')
+        if os.path.exists(pubs):
+            dept_dirs = os.listdir(pubs)
         else:
-            print("no shot folders found!")
-        departments = [
-        d for d in dept_dirs
-        if os.path.isdir(os.path.join(shot, d))
-        ]
-        return departments
+            print("no usd shot folder found!")
+        if len(dept_dirs)>0:
+            dept_paths = [
+            os.path.join(pubs,d) for d in dept_dirs
+            if os.path.isdir(os.path.join(pubs, d))
+            ]
+            return [dept_paths,dept_dirs]
+        else:
+            return None
     
 
