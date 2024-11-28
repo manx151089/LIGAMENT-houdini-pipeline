@@ -16,10 +16,12 @@ def setShowHou():
             if os.path.exists(path):
                 os.environ['JOB'] = path
                 os.environ['SHOW'] = path
+                hou.hscript("set -g SHOW = {}".format(path))
+                hou.hscript("set -g JOB = {}".format(path))
             else:
                 print('permissionDenied: Could not create Job')
         
-    print (os.environ['JOB'])
+    print (os.environ['JOB'],hou.getenv('SHOW'))
 
 def setSeqHou():
     job = hou.getenv('JOB')
