@@ -63,8 +63,19 @@ class lsa:
         '''
         This will create a list of departments that have published usds for a shot
 
-        Returns:
-            departments (list): List of the departments that have published a file in the usd folder.
+        Args:
+
+            shot (str. path): String that is a path to shot. It needs to have 
+            a parent folder called "shots" and in the same level of "shots" 
+            there would be a sister folder with all the publishes called as 
+            usd which should have the same folder structure.
+
+        Returns -> [department_paths,departments]
+            
+            department_paths (list): List of the department paths that have 
+            published a file in the usd folder,
+
+            departments (list): List of the folder names of the department.
 
         To-do:
             Need to add a version resolver function
@@ -85,3 +96,35 @@ class lsa:
             return None
     
 
+    def get_versions_from_dept(dept_path,list_all_versions=True,padding=3):
+        """
+        Usage:
+            get_version_from_dept(dept_path,list_all_versions=True,padding=3)
+
+        Args:
+            dept_path : dept path would be folder in which there would be 
+            version folders followed by a geometry file called 'geometry.*'
+
+            list_all_versions : return a list of all the versions in that 
+            task/dept folder.
+            
+            padding : number of digits in the folder string 
+            (for example v001 has 3 digits so the padding would be 3)
+        """
+        search_str = str(dept_path)+'/v*/geometry.*'
+        version_dirs = glob.glob(search_str)
+        versions = {int(v.replace('\\','/').split('/geometry.')[0][-padding:]):v for v in version_dirs}
+        if list_all_versions is True:
+            print (versions)
+            return versions
+        else:
+            #sorted(versions,key=lambda x: x.split('/') #need to fix this sort to spit out the latest version
+            return versions[max(versions.keys())]
+            
+
+
+
+#shot='D:/prod/lgmfx/shots/seq_001/cdev_genericstest_001'
+#depts = lsa.list_depts_from_shot(shot)[0]
+#dept_path = depts[0]
+#print(lsa.get_versions_from_dept(dept_path,list_all_versions=False))
