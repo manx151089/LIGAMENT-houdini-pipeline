@@ -1,7 +1,9 @@
 import hou
 import os
-#from lgmfxShotApi import lsa
+from lgmfxShotApi import lsa
 import glob
+
+
 
 def __init__():
     pass
@@ -27,18 +29,17 @@ def load_usd_files_from_departments(shotname,show,pub_directory="usd"):
     and one to load a single stage from the dept and append to the current stage
     '''
     
-    ###NEED TO FIX THIS ONE NOW to use LSA properly and test in houdini LSA first and this script later
-    #departments_v2 = lsa.list_depts_from_shot
-    #print(departments_v2)
+    dept_paths,departments = lsa.lsa.list_depts_from_shot(shotname)    
+    usd_files_to_load = [lsa.lsa.get_versions_from_dept(dept_path,list_all_versions=False) for dept_path in dept_paths]
     
-    directory = pub_directory
+    """directory = pub_directory
     base_directory = os.path.normpath(os.path.join(show,shotname,directory))
     usd_files_to_load = glob.glob(base_directory+'\*\*geometry_v001.usd')
     usd_files_to_load = [x.replace('\\\\','/') for x in usd_files_to_load]
-    #to avoid all this above scripts repetitively we need a shotApi which
-    #will resolve the paths to the format we want
+    """
+    
     print('PRELOAD : usd files found:',usd_files_to_load)
-    stage = hou.pwd().editableStage()#
+    stage = hou.pwd().editableStage()
     for usd_file in usd_files_to_load:
         if os.path.exists(usd_file):
             root = stage.GetEditTarget().GetLayer()
