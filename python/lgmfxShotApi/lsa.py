@@ -115,10 +115,9 @@ class lsa:
         version_dirs = glob.glob(search_str)
         versions = {int(v.replace('\\','/').split('/geometry.')[0][-padding:]):v for v in version_dirs}
         if list_all_versions is True:
-            print (versions)
+            #print (versions)
             return versions
         else:
-            #sorted(versions,key=lambda x: x.split('/') #need to fix this sort to spit out the latest version
             return versions[max(versions.keys())]
             
 
