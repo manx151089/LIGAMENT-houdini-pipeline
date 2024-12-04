@@ -94,5 +94,8 @@ def load(node):
     departments,versions = make_dept_menu(node)
     #depts_loaded.remove(departments)
     [departments.remove(x) for x in depts_loaded]
-    print(departments)#need to load these departments
+    for dept in departments:
+        dept_index= mp.evalAsInt()
+        mp.insertMultiParmInstance()
+        print(mp.multiParmInstancesAsData())
     
