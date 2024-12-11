@@ -1,6 +1,7 @@
 import cv2
 import os
 def convertMp4ToJpg(filepath="",folder="",mkdir=False):
+    """This function converts mp4 to a jpg sequence."""
     if folder!="" and filepath!="":
         vidcap = cv2.VideoCapture(filepath)
         if(mkdir==True):

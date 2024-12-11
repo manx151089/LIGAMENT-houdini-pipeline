@@ -1,4 +1,3 @@
-print("===welcome to visionGod===")
 
 import cv2
 from cvzone.PoseModule import PoseDetector
@@ -9,15 +8,20 @@ def openCvMotionCap(path,destination):
     """
     openCvMotionCap(path,destination)
     
-    path: the path to mp4 file to capture motion from
-    destination file: target file path to save the animation file in
+    Args:
+
+        path: the path to mp4 file to capture motion from
+
+        destination file: target file path to save the animation file in
 
     usage example:
-    path = 'D:\Tools\houdini\python\spotJog.mp4'
-    destination= 'D:\Tools\houdini\python\AnimationFile.txt'
-    openCvMotionCap(path,destination)
+    
+        path = 'D:\Tools\houdini\python\spotJog.mp4'
+    
+        destination= 'D:\Tools\houdini\python\AnimationFile.txt'
+    
+        openCvMotionCap(path,destination)
     """
-    print('===start===')
     #path = 'D:\Tools\houdini\python\spotJog.mp4'
     #destination = 'D:\Tools\houdini\python\AnimationFile3.txt'
     cap = cv2.VideoCapture(path)
@@ -48,10 +52,6 @@ def openCvMotionCap(path,destination):
         if bboxInfo:
             lmString = ''
             for lm in lmList:
-                #print('lm[1]:',lm[0])
-                #print('img.shape[0]',img.shape[0])
-                #print('lm:',lm)
-                #print(lm[1],lm[2])#this  line errors out
                 lmString += f'{lm[0]},{img.shape[0]-lm[1]},{lm[2]},'#need to test this line I tweaked to be lm[0-2] from lm[1-3]
             posList.append(lmString)
         curFrame = len(posList)
@@ -100,10 +100,7 @@ def makeOpenCvPoints(path):
     posArray = np.split(positions,myLength)
     scale = np.asarray([0.01,0.01,0.005])
     posArray = [np.multiply(x,scale) for x in posArray]
-    
-    
     listPosArray = [x.tolist() for x in posArray]
-    
     geo.clear()
     geo.createPoints(listPosArray)
     
