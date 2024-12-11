@@ -10,6 +10,7 @@ class lsa:
         get_show_from_shot()
         list_depts_from_shot()
     '''
+
     def get_prod_folder_from_path(self,path):
         '''
         Returns:
@@ -25,10 +26,10 @@ class lsa:
         '''
         This function returns the seq name or path
         Args:
-            shot (directory): A directory of the shot
-            path (boolean): To return the path instead of just the seq name
+        shot (directory): A directory of the shot
+        path (boolean): To return the path instead of just the seq name
         Returns:
-            seq (str):name or path
+        seq (str):name or path
         '''
         folders = os.path.split(shot)
         offset = 3
@@ -45,9 +46,9 @@ class lsa:
         '''
         This function returns the seq name or path
         Args:
-            path (boolean): To return the path instead of just the seq name
+        path (boolean): To return the path instead of just the seq name
         Returns:
-            show
+        show
         '''
         folders = os.path.split(shot)
         offset = 1
