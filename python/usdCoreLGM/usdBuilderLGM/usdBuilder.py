@@ -4,11 +4,6 @@ from lgmfxShotApi import lsa
 import glob
 
 
-
-def __init__():
-    pass
-
-
 def load_usd_files_from_departments(shotname,show,pub_directory="usd"):
     '''
     Scans the specified base directory for department subfolders, checks for 

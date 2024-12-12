@@ -1,9 +1,21 @@
 import os 
 import hou
 import platform
-def setShowHou():
+def setShowHou(studioProdDir = 'D:/prod/'):
+    """
+    This will let the user set the show. If it doesnt exist it will ask
+    you if you want to create a folder.
+
+    Args:
+
+        studioProdDir:the Production folder under which one would expect
+        shows/jobs/assets.
+
+    Please customise D:/prod/ to your convineance. Please note some HDA's 
+    use a string.split() or concatenations. If you run into issues please 
+    feel free to contact me at manx151089@gmail.com
+    """
     projname = hou.ui.readInput('enter show code')[1]
-    studioProdDir = 'D:/prod/'
     #path=(studioProdDir+projname+'/')
     path=(studioProdDir+projname)
     if os.path.exists(path):
@@ -24,6 +36,11 @@ def setShowHou():
     print (os.environ['JOB'],hou.getenv('SHOW'))
 
 def setSeqHou():
+    """
+    This would let the user set the sequence in the environment.
+    Also it would let the user create the sequence folder if it
+    does not exist. Feel free to add user permission validations.
+    """
     job = hou.getenv('JOB')
     seqsDir = os.path.join(job,'shots')
     print('...',seqsDir,'exists:',os.path.exists(seqsDir))
@@ -37,7 +54,7 @@ def setSeqHou():
         print('setting SEQ env to',project)
         hou.hscript("set -g SEQ = {}".format(project))
         hou.hscript("set -g SEQNAME = {}".format(seqs[seqSel[0]]))
-        #print('set seq to:',hou.getenv('SEQ'))
+        
 
     else:
         print('Seq:',seqsDir,'\ndoes not exist')
@@ -48,6 +65,9 @@ def setSeqHou():
             os.makedirs(dir_path,exist_ok=True)
 
 def setShotHou():
+    """
+    This would let the user create or set the shot.
+    """
     seq = hou.getenv('SEQ')
     shotsDir = seq
     if os.path.exists(shotsDir):
