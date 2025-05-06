@@ -1,0 +1,26 @@
+Welcome to Ligament FX USD Core's documentation!
+************************************************
+
+
+Contents:
+^^^^^^^^^
+
+* usdCoreLGM
+
+  * usdCoreLGM package
+
+    * Subpackages
+
+      * usdCoreLGM.usdBuilderLGM package
+
+    * Module contents
+
+
+Indices and tables
+******************
+
+* Index
+
+* Module Index
+
+* Search Page

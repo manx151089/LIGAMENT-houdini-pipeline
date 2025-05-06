@@ -1,0 +1,16 @@
+usdCoreLGM
+**********
+
+* usdCoreLGM package
+
+  * Subpackages
+
+    * usdCoreLGM.usdBuilderLGM package
+
+      * Submodules
+
+      * usdCoreLGM.usdBuilderLGM.usdBuilder module
+
+      * Module contents
+
+  * Module contents

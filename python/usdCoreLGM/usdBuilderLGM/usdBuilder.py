@@ -3,6 +3,8 @@ import os
 from lgmfxShotApi import lsa
 import glob
 
+def __init__():
+    pass
 
 def load_usd_files_from_departments(shotname,show,pub_directory="usd"):
     '''
@@ -14,17 +16,25 @@ def load_usd_files_from_departments(shotname,show,pub_directory="usd"):
     contain a "geometry.usd" file.
 
     Usage:
+        
         load_usd_files_from_departments(shotname,show,pub_directory="usd")
 
     Args: 
+        
         shotname (str): folder name of the shot
+        
         show (str path): path of the show
+    
     Returns:
+        
         None
 
     TO-DO:
-    Need to deprecate this an split the function into follows.
+        
+        Need to deprecate this an split the function into follows.
+        
         update_multiparm_with_latest_versions()
+        
         load_usd_files_from_multiparm()
     '''
     
@@ -45,17 +55,23 @@ def get_dict_with_versions(shotname,get_latest_version=False):
     a list of departments and a dictionary of all versions.
 
     Usage:
-    get_dict_with_versions(shotname,get_latest_version=False)
+
+        get_dict_with_versions(shotname,get_latest_version=False)
 
     Args:
-    shotname (str. path) : the directory to the shot
-    get_latest_version (bool.) : If set to True this will return a list of latest versions
-      instead of a dictionary of all versions. Default is False.
+
+        shotname (str. path) : the directory to the shot
+
+        get_latest_version (bool.) : If set to True this will return a list of latest versions
+        instead of a dictionary of all versions. Default is False.
 
     Returns: 
-    [[departments] {int version_number:str version_path}] 
-    or
-    [[str departments] [str latest_versions]]]
+
+        [[departments] {int version_number:str version_path}] 
+        
+        or
+        
+        [[str departments] [str latest_versions]]]
     
     """
     dept_paths,departments = lsa.lsa.list_depts_from_shot(shotname)
@@ -141,6 +157,7 @@ def append_stage_with_paths(path_list=[]):
     Use in a python LOP to build the stage with a list of paths.
     
     Args:
+        
         path_list (str. path list) : list of paths to `.usd` files.
     """
     if len(path_list) != 0:
@@ -159,6 +176,7 @@ def get_usd_path_list(node):
     of Current Dept Path.
 
         Args:
+            
             node(hou.Node): Usually the multiparm would be on a parent hda. 
             Use `hou.pwd().parent()` to get to the node.
     """
